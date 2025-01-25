@@ -2,15 +2,18 @@ name: Deploy Development
 
 on:
   push:
-    branches: [develop]
+    branches:
+      - develop
 
 jobs:
   build:
+    name: Build Website
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
       - name: Install Dependencies
-        run: npm install parcel
+        run: npm install --save-dev parcel
       - name: Build Project
         run: npx parcel build src/*
       - name: Upload Artifact
@@ -19,8 +22,9 @@ jobs:
           path: dist
 
   deploy:
-    runs-on: ubuntu-latest
+    name: Deploy to GitHub Pages
     needs: build
+    runs-on: ubuntu-latest
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploy Website
         uses: actions/deploy-pages@v4
